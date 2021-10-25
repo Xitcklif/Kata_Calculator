@@ -1,10 +1,53 @@
+/* main для проверок.
+public static void main(String[] args)
+    {
+        String[] anum = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        String[] rnum = new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        String[] sym = new String[] {" + ", " - ", " * ", " / "};
+
+        for (byte i = 0; i < 10; i++)
+        {
+            for (byte j = 0; j < 10; j++)
+            {
+                for (byte k = 0; k < 4; k++)
+                {
+                    System.out.print(anum[i] + sym[k] + anum[j] + " = ");
+                    String[] str = (anum[i] + sym[k] + anum[j]).split(" ");
+                    byte check = check_string(str); //0 - Неверная строка, 2 - арабские числа, -2 - римские числа.
+                    if (check != 0)
+                        calculate(str, check);
+                    else
+                        System.out.println("throws Exception //Неверный формат строки");
+                }
+            }
+        }
+        System.out.println("##################");
+        for (byte i = 0; i < 10; i++)
+        {
+            for (byte j = 0; j < 10; j++)
+            {
+                for (byte k = 0; k < 4; k++)
+                {
+                    System.out.print(rnum[i] + sym[k] + rnum[j] + " = ");
+                    String[] str = (rnum[i] + sym[k] + rnum[j]).split(" ");
+                    byte check = check_string(str); //0 - Неверная строка, 2 - арабские числа, -2 - римские числа.
+                    if (check != 0)
+                        calculate(str, check);
+                    else
+                        System.out.println("throws Exception //Неверный формат строки");
+                }
+            }
+        }
+}
+ */
+
 package main;
 import java.util.Scanner;
 import java.lang.String;
 
 public class Calculator
 {
-    public static void main (String[] args)
+    public static void main(String[] args)
     {
         Scanner in = new Scanner(System.in);
 
@@ -30,12 +73,16 @@ public class Calculator
                 check++;
             if (str[0].equals(rnum[i]) || str[2].equals(rnum[i]))
                 check--;
+            if (str[0].equals(str[2]) && str[2].equals(anum[i]))
+                check++;
+            if (str[0].equals(str[2]) && str[2].equals(rnum[i]))
+                check--;
             if (i == 9 && check != 2 && check != -2)
                 return (0);
         }
-        if (get_symbol(str[1]) == 0)
+        if (get_symbol(str[1]) == -1)
             return (0);
-        return (byte)(check);
+        return (check);
     }
 
     public static void calculate(String[] str, byte check)
@@ -80,7 +127,7 @@ public class Calculator
         for (byte i = 0; i < 4; i++)
             if (str.equals(sym[i]))
                 return (i);
-        return (0);
+        return (-1);
     }
 
     public static void print_roman_number(byte num)
@@ -88,7 +135,7 @@ public class Calculator
         byte hundred, ten, units;
 
         if (num < 1)
-            System.out.println("throws Exception //В римской системе нет отрицательных чисел");
+            System.out.println("throws Exception //В римской системе нет отрицательных чисел и нуля");
         else
         {
             hundred = (byte)(num / 100);
